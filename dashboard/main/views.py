@@ -1,4 +1,6 @@
 from django.shortcuts import HttpResponse
+from scripts.models import Projects
 
 def index(request):
-    return HttpResponse("Hello, world. OpenDayLight.")
+	projectList =  Projects.objects.all()
+    	return HttpResponse(projectList)
