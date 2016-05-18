@@ -13,4 +13,21 @@ def taskGetProjectsList():
     logger.info("Started taskGetProjectsList")
     result = scraper.getProjectsList()
     logger.info("Finished taskGetProjectsList")    
-			
+
+@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskGetBugStatus():
+    logger.info("Started taskGetBugStatus")
+    result = scraper.getBugStatus()
+    logger.info("Finished taskGetBugStatus")
+
+@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskGetBugSeverity():
+    logger.info("Started taskGetBugSeverity")
+    result = scraper.getBugSeverity()
+    logger.info("Finished taskGetBugSeverity")
+
+@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskGetBugPriority():
+    logger.info("Started taskGetBugPriority")
+    result = scraper.getBugPriority()
+    logger.info("Finished taskGetBugPriority")

@@ -1,6 +1,13 @@
-from django.shortcuts import HttpResponse
-from scripts.models import Projects
+from django.shortcuts import get_object_or_404,HttpResponse,render
+from scripts.models import Projects,Bugs
 
 def index(request):
 	projectList =  Projects.objects.all()
-    	return HttpResponse(projectList)
+	data = {'projectList' : projectList}
+    	return render(request, 'main/projectList.html', data)
+
+def project(request, project_id):
+    project = get_object_or_404(Projects, pk=project_id)
+    bugs = get_object_or_404(Bugs,projectName=project)
+    data = {'project' : project,'bugs' : bugs}
+    return render(request, 'main/project.html', data)
