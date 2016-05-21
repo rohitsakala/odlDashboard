@@ -26,3 +26,8 @@ class Bugs(models.Model):
 	normal = models.IntegerField(default=0)
 	low = models.IntegerField(default=0)
 	lowest = models.IntegerField(default=0)
+
+class Test(models.Model):
+	projectName =  models.OneToOneField('Projects',on_delete=models.CASCADE)
+	coverage = models.FloatField(default=0)
+	successDensity = models.FloatField(default=0)

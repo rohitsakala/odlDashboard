@@ -31,3 +31,15 @@ def taskGetBugPriority():
     logger.info("Started taskGetBugPriority")
     result = scraper.getBugPriority()
     logger.info("Finished taskGetBugPriority")
+
+@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskGetTestCoverage():
+    logger.info("Started taskGetTestCoverage")
+    result = scraper.getTestCoverage()
+    logger.info("Finished taskGetTestCoverage")
+
+@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskGetSuccessDensity():
+    logger.info("Started taskGetSuccessDensity")
+    result = scraper.getSuccessDensity()
+    logger.info("Finished taskGetSuccessDensity")
