@@ -43,3 +43,21 @@ def taskGetSuccessDensity():
     logger.info("Started taskGetSuccessDensity")
     result = scraper.getSuccessDensity()
     logger.info("Finished taskGetSuccessDensity")
+
+@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskGetRepos():
+    logger.info("Started taskGetRepos")
+    result = scraper.getRepos()
+    logger.info("Finished taskGetRepos")
+
+@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskGetCommitCountTotal():
+    logger.info("Started taskGetCommitCountTotal")
+    result = scraper.getCommitCountTotal()
+    logger.info("Finished taskGetCommitCountTotal")
+
+@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskGetCommitCountLastWeek():
+    logger.info("Started taskGetCommitCountLastWeek")
+    result = scraper.getCommitCountLastWeek()
+    logger.info("Finished taskGetCommitCountLastWeek")

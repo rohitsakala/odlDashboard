@@ -31,3 +31,8 @@ class Test(models.Model):
 	projectName =  models.OneToOneField('Projects',on_delete=models.CASCADE)
 	coverage = models.FloatField(default=0)
 	successDensity = models.FloatField(default=0)
+
+class Commit(models.Model):
+	projectName =  models.OneToOneField('Projects',on_delete=models.CASCADE)
+	totalCount = models.IntegerField(default=0)
+	lastWeekCount = models.IntegerField(default=0)

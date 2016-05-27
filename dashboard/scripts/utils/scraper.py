@@ -3,8 +3,10 @@
 import requests
 import csv
 import re
+from datetime import date
+from datetime import timedelta
 from celery.utils.log import get_task_logger
-from scripts.models import Projects,Bugs,Test
+from scripts.models import Projects,Bugs,Test,Commit
 
 logger = get_task_logger(__name__)
 
@@ -79,7 +81,6 @@ def getTestCoverage():
 
 def getSuccessDensity():
 	url = "https://sonar.opendaylight.org/api/resources?metrics=test_success_density&format=json"
-	method = "GET"
 	r = requests.get(url)
 	for i in range(len(r.json())):
 		if 'branch'  not in r.json()[i]:
@@ -92,4 +93,50 @@ def getSuccessDensity():
 				project = Projects.objects.get(name=m.group(1))
 			Test.objects.update_or_create(projectName=project,defaults={'successDensity':r.json()[i]['msr'][0]['val']})
 
-			
+def getCommitCountTotal():
+	projects = Projects.objects.all()
+	for project in projects:
+		page = 1
+		count = 0
+		while 1:
+			url = "https://api.github.com/repos/opendaylight/"+project.name+"/commits?page="+str(page)+"&per_page=100"
+			r = requests.get(url)
+			if r.status_code != 200:
+				break
+			else:
+				count = count + len(r.json())
+				Commit.objects.update_or_create(projectName=project,defaults={'totalCount':count})
+				if r.links:
+					try:
+
+						page = r.links['next']['url'].split("=")[1][0]
+					except:
+						break
+				else:
+					break
+
+def getRepos():
+	url = "https://api.github.com/orgs/opendaylight/repos?page=1&per_page=100"
+	r = requests.get(url)
+	for i in range(len(r.json())):
+		name = r.json()[i]['name']
+		try:
+			project = Projects.objects.get(name=name)
+		except:
+			Projects.objects.update_or_create(name=name)
+
+def getCommitCountLastWeek():
+	projects = Projects.objects.all()
+	today = date.today()
+	lastDate = today - timedelta(days=7)
+	logger.info("asdfasdfsafsdafsadfsa")
+	logger.info(lastDate)
+	for project in projects:
+		count = 0
+		url = "https://api.github.com/repos/opendaylight/"+project.name+"/commits?page=1&per_page=100&since="+str(lastDate)
+		r = requests.get(url)
+		if r.status_code != 200:
+			break
+		else:
+			count = len(r.json())
+			Commit.objects.update_or_create(projectName=project,defaults={'lastWeekCount':count})
