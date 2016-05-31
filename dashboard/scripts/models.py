@@ -36,3 +36,11 @@ class Commit(models.Model):
 	projectName =  models.OneToOneField('Projects',on_delete=models.CASCADE)
 	totalCount = models.IntegerField(default=0)
 	lastWeekCount = models.IntegerField(default=0)
+
+class Contributors(models.Model):
+	projectName =  models.ForeignKey('Projects',on_delete=models.CASCADE)
+	contributorName = models.CharField(max_length=255)
+	contributionCount = models.IntegerField(default=0)
+
+	class Meta:
+		unique_together = ('projectName','contributorName')
