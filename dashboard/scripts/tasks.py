@@ -6,14 +6,14 @@ import redis
 from celery import chain
 from django.core.cache import cache
 from hashlib import md5
-from scripts.utils import scraper
+from scripts.utils import scraper,webScraper
 from celery.utils.log import get_task_logger
  
 logger = get_task_logger(__name__)
 
 # A periodic task that will run every day to fetch list of OpenDayLight projects 
-@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
-def taskGetProjectsList():
+#@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskPeriodicTasks():
     haveLock = False
     Lock = redis.Redis().lock("projects")
     try:
@@ -32,6 +32,22 @@ def taskGetProjectsList():
                 scraper.getCommitCountTotal(),
                 scraper.getContributorsCount(),
                 scraper.getCommitCountLastWeek()
+            )
+    finally:
+        if haveLock:
+            logger.info("Released")
+            Lock.release()
+
+@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+def taskGetPerformanceGraphs():
+    haveLock = False
+    Lock = redis.Redis().lock("graphs")
+    try:
+        haveLock = Lock.acquire(blocking=False)
+        if haveLock:
+            logger.info("Locked")
+            chain(
+                webScraper.getPerformanceGraphs()
             )
     finally:
         if haveLock:

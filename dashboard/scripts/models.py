@@ -44,3 +44,17 @@ class Contributors(models.Model):
 
 	class Meta:
 		unique_together = ('projectName','contributorName')
+
+class Urls(models.Model):
+	url = models.CharField(unique=True,max_length=100023)
+
+class PerformanceGraphs(models.Model):
+	mainUrl = models.ForeignKey('Urls',blank=True)
+	jobName = models.CharField(max_length=1000)
+	toolUsed = models.CharField(max_length=1000)
+	componentName = models.CharField(max_length=1000)
+	jenkinsUrl = models.CharField(max_length=1000)
+	plotId = models.IntegerField()
+
+	class Meta:
+		unique_together = ('jobName','plotId')

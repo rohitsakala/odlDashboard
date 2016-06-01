@@ -48,7 +48,7 @@
     </nav>
   </header>
   <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
+ <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
       <!-- search form -->
@@ -70,7 +70,7 @@
             <i class="fa fa-dashboard"></i> <span>Project</span> <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="/main"><i class="fa fa-circle-o"></i> projectList</a></li>
+            <li ><a href="/main"><i class="fa fa-circle-o"></i> projectList</a></li>
           </ul>
         </li>
       <li class="treeview">
@@ -80,7 +80,7 @@
           </a>
           <ul class="treeview-menu">
           {% for component in components %}
-            <li><a href="performance/{{component.componentName }}/"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a></li>
+            <li><a href="/main/performance/{{component.componentName }}/"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a></li>
           {% endfor %}
           </ul>
         </li>
@@ -201,12 +201,13 @@
     <!-- /.sidebar -->
   </aside>
 
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Dashboard
+        {{ name }} Performance Results
         <small>Release</small>
       </h1>
       <ol class="breadcrumb">
@@ -217,229 +218,27 @@
 
     <!-- Main content -->
     <section class="content">
-    {% if bugs != None %}
       <div class="row">
-        <div class="col-md-12">
-          <div class="box">
+            {% for graph in performance %}
+
+        <div class="col-md-6">
+          <div class="box box-success">
             <div class="box-header">
-              <h3 class="box-title">{{ project.name }} Bugs</h3>
+              <h3 class="box-title">{{ graph.jobName }}</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table1" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>Attribute</th>
-                  <th>Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td>Unconfirmed</td>
-                  <td>{{bugs.unconfirmed}}</td>
-                </tr>
-                <tr>
-                  <td>Confirmed</td>
-                  <td>{{bugs.confirmed}}</td>
-                </tr>
-                <tr>
-                  <td>inProgress</td>
-                  <td>{{bugs.inProgress}}</td>
-                </tr>
-                <tr>
-                  <td>waitingForReview</td>
-                  <td>{{bugs.waitingForReview}}</td>
-                </tr>
-                <tr>
-                  <td>blocker</td>
-                  <td>{{bugs.blocker}}</td>
-                </tr>
-                <tr>
-                  <td>critical</td>
-                  <td>{{bugs.critical}}</td>
-                </tr>
-                <tr>
-                  <td>major</td>
-                  <td>{{bugs.major}}</td>
-                </tr>
-                <tr>
-                  <td>normal</td>
-                  <td>{{bugs.normal}}</td>
-                </tr>
-                <tr>
-                  <td>minor</td>
-                  <td>{{bugs.minor}}</td>
-                </tr>
-                <tr>
-                  <td>trivial</td>
-                  <td>{{bugs.trivial}}</td>
-                </tr>
-                <tr>
-                  <td>enhancement</td>
-                  <td>{{bugs.enhancement}}</td>
-                </tr>
-                <tr>
-                  <td>highest</td>
-                  <td>{{bugs.highest}}</td>
-                </tr>
-                <tr>
-                  <td>high</td>
-                  <td>{{bugs.high}}</td>
-                </tr>
-                <tr>
-                  <td>normal</td>
-                  <td>{{bugs.normal}}</td>
-                </tr>
-                <tr>
-                  <td>low</td>
-                  <td>{{bugs.low}}</td>
-                </tr>
-                <tr>
-                  <td>lowest</td>
-                  <td>{{bugs.lowest}}</td>
-                </tr>
-                </tbody>
-                <tfoot>
-                <tr>
-                  <th>Attribute</th>
-                  <th>Count</th>
-                </tr>
-                </tfoot>
-              </table>
+              <img src="{{ graph.jenkinsUrl}}" class="img-responsive" alt="Responsive image">      
             </div>
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
         </div>
         <!-- /.col -->
+      {% endfor %}
       </div>
       <!-- /.row -->
-    {% endif %}
-    {% if test != None %}
-      <div class="row">
-        <div class="col-md-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">{{ project.name }} Tests</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table id="table2" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>Attribute</th>
-                  <th>Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td>Unit Test Coverage</td>
-                  <td>{{test.coverage}}</td>
-                </tr>
-                <tr>
-                  <td>Success Density</td>
-                  <td>{{test.successDensity}}</td>
-                </tr>
-                </tbody>
-                <tfoot>
-                <tr>
-                  <th>Attribute</th>
-                  <th>Count</th>
-                </tr>
-                </tfoot>
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    {% endif %}
-    {% if commit != None %}
-      <div class="row">
-        <div class="col-md-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">{{ project.name }} Commits</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table id="table3" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>Attribute</th>
-                  <th>Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td>Total Commits</td>
-                  <td>{{commit.totalCount}}</td>
-                </tr>
-                <tr>
-                  <td>LastWeek Commits</td>
-                  <td>{{commit.lastWeekCount}}</td>
-                </tr>
-                </tbody>
-                <tfoot>
-                <tr>
-                  <th>Attribute</th>
-                  <th>Count</th>
-                </tr>
-                </tfoot>
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-      {% endif %}
-      {% if contributors != None %}
-      <!-- /.row -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">{{ project.name }} Contributors</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table id="table4" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>Contributor Name</th>
-                  <th>Contributor Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for contributor in contributors %}
-                <tr>
-                  <td>{{contributor.contributorName}}</td>
-                  <td>{{contributor.contributionCount}}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-                <tfoot>
-                <tr>
-                  <th>Contributor Name</th>
-                  <th>Contributor Count</th>
-                </tr>
-                </tfoot>
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    {% endif %}
+ 
     </section>
     <!-- /.content -->
   </div>
@@ -664,12 +463,4 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'main/dist/js/demo.js' %}"></script>
 </body>
-<script>
-  $(function () {
-    $("#table1").DataTable();
-    $("#table2").DataTable();
-    $("#table3").DataTable();
-    $("#table4").DataTable();
-  });
-</script>
 </html>
