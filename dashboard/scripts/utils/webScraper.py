@@ -27,10 +27,17 @@ def getPerformanceGraphs():
 				jobName = li.find_next('a').string
 				r2 = requests.get(jenkinsUrl)
 				soup2 = BeautifulSoup(r2.text,'html.parser')
-				for i in range(len(soup2.find('select').find_all('option'))):
-					newUrl = jenkinsUrl + "getPlot?index="+str(i)+"&width=750&height=450"
-					plotId = i
-					PerformanceGraphs.objects.update_or_create(mainUrl=url,jobName=jobName,toolUsed=toolUsed,componentName=componentName,jenkinsUrl=newUrl,plotId=plotId)
+				length = 0
+				try:
+					length = len(soup2.find('select').find_all('option'))
+				except:
+					pass
+				if length != 0:
+					for i in range(length):
+						newUrl = jenkinsUrl + "getPlot?index="+str(i)+"&width=750&height=450"
+						plotId = i
+						PerformanceGraphs.objects.update_or_create(plotId=plotId,jobName=jobName,defaults={'mainUrl':url,'toolUsed':toolUsed,'componentName':componentName,'jenkinsUrl':newUrl})
+
 
 
 
