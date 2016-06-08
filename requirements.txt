@@ -1,15 +1,5 @@
 amqp==1.4.9
 anyjson==0.3.3
-billiard==3.3.0.23
-celery==3.1.23
-Django==1.9.5
-django-celery==3.1.17
-kombu==3.0.35
-psycopg2==2.6.1
-pytz==2016.4
-requests==2.10.0
-amqp==1.4.9
-anyjson==0.3.3
 beautifulsoup4==4.4.1
 billiard==3.3.0.23
 celery==3.1.23
