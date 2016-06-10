@@ -9,4 +9,6 @@ urlpatterns = [
     url(r'^project/(?P<project_id>[0-9]+)/$', views.project, name='project'),
     # /main/performance/name
     url(r'^performance/(?P<name>.*)/$', views.performance, name='performance'),
+    # /main/comparison
+    url(r'^comparison/', views.comparison, name='comparison'),
 ]

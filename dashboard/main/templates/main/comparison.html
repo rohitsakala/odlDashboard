@@ -1,0 +1,152 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>OpenDayLight Release Dashboard</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="{% static 'main/bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="{% static 'main/plugins/datatables/dataTables.bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'main/dist/css/AdminLTE.min.css' %}">
+  <link rel="stylesheet" href="{% static 'main/dist/css/skins/skin-blue.min.css' %}">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+  <header class="main-header">
+    <a href="https://www.opendaylight.org" class="logo">
+      <span class="logo-mini"><b>ODL</b></span>
+      <span class="logo-lg"><b>OpenDayLight</b></span>
+    </a>
+    <nav class="navbar navbar-static-top">
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+    </nav>
+  </header>
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      <ul class="sidebar-menu">
+        <li class="header">MAIN NAVIGATION</li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>Project</span> <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="/main"><i class="fa fa-circle-o"></i> List</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>Performance Tests</span><i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+          {% for component in components %}
+            <li><a href="/main/performance/{{component.componentName }}/"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a></li>
+          {% endfor %}
+          </ul>
+        </li>
+        <li class="active">
+          <a href="/main/comparison"><span>Comparison</span></a>
+        </li>
+    </section>
+  </aside>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Release</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/main/"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/main/">Project</a></li>
+        <li><a href="/main/project/{{project.id}}/">{{project.name}}</a></li>
+      </ol>
+    </section>
+    <section class="content">
+      <div id="container" style="min-width: 310px; height: 700px; margin: 0 auto"></div>
+    </section>
+  </div>
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 0.0.1
+    </div>
+    <strong>Copyright &copy; 2016 <a href="http://www.opendaylight.org">OpenDayLight</a>.</strong> All rights
+    reserved.
+  </footer>
+</div>
+<script src="{% static 'main/plugins/jQuery/jQuery-2.2.0.min.js' %}"></script>
+<script src="{% static 'main/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'main/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'main/plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'main/plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'main/plugins/fastclick/fastclick.js' %}"></script>
+<script src="{% static 'main/dist/js/app.min.js' %}"></script>
+<script src="{% static 'main/dist/js/demo.js' %}"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'Project Scores'
+        },
+        subtitle: {
+            text: 'OpenDayLight'
+        },
+        xAxis: {
+            categories: {{ projects|safe }},
+            title: {
+                text: null
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Projects',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+        tooltip: {
+            valueSuffix: ''
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+            shadow: true
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Score',
+            data: {{ values }}
+        }]
+    });
+});
+</script>
+</body>
+</html>
