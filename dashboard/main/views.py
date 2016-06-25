@@ -4,13 +4,19 @@ import json
 
 def index(request):
     projectList = Projects.objects.all()
-    components = PerformanceGraphs.objects.order_by().values('componentName').distinct()
-    data = {'projectList' : projectList,'components':components}
+    plugins = PerformanceGraphs.objects.values('plugin').distinct()
+    pluginComponent = {}
+    for i in range(len(plugins)):
+        pluginComponent[plugins[i]['plugin']] = PerformanceGraphs.objects.filter(plugin=plugins[i]['plugin']).order_by().values('componentName').distinct()
+    data = {'projectList' : projectList,'pluginComponent':pluginComponent}
     return render(request, 'main/list.html', data)
 
 def project(request, project_id):
     project = get_object_or_404(Projects, pk=project_id)
-    components = PerformanceGraphs.objects.order_by().values('componentName').distinct()
+    plugins = PerformanceGraphs.objects.values('plugin').distinct()
+    pluginComponent = {}
+    for i in range(len(plugins)):
+        pluginComponent[plugins[i]['plugin']] = PerformanceGraphs.objects.filter(plugin=plugins[i]['plugin']).order_by().values('componentName').distinct()
     try:
         bugs = Bugs.objects.get(projectName=project)
     except:
@@ -27,7 +33,7 @@ def project(request, project_id):
         contributors = Contributors.objects.filter(projectName=project)
     except:
         contributors = None
-    data = {'project' : project,'bugs' : bugs,'test' : test,'commit' : commit,'contributors' : contributors,'components':components}
+    data = {'project' : project,'bugs' : bugs,'test' : test,'commit' : commit,'contributors' : contributors,'pluginComponent':pluginComponent}
     return render(request, 'main/project.html', data)
 
 def performance(request,name,plugin):

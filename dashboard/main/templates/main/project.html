@@ -44,26 +44,21 @@
             <i class="fa fa-share"></i> <span>Performance Tests</span>
             <i class="fa fa-angle-left pull-right"></i>
           </a>
+          {% for key,value in pluginComponent.items %}
           <ul class="treeview-menu">
             <li>
-              <a href="#"><i class="fa fa-circle-o"></i> Boron Plugin <i class="fa fa-angle-left pull-right"></i></a>
+              <a href="#"><i class="fa fa-circle-o"></i>{{ key }}<i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-              {% for component in components %}
-                <li><a href="/main/performance/boron/{{component.componentName }}/"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a></li>
-              {% endfor %}
-              </ul>
-            </li>
-            <li>
-              <a href="#"><i class="fa fa-circle-o"></i> Beryllium Plugin <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-              {% for component in components %}
-                <li><a href="/main/performance/beryllium/{{component.componentName }}/"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a></li>
+              {% for component in value %}
+              <li><a href="/main/performance/{{key}}/{{component.componentName}}/"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a></li>
               {% endfor %}
               </ul>
             </li>
           </ul>
-        </li>
-      </section>
+          {% endfor %}
+         </li>
+      </ul>
+    </section>
   </aside>
   <div class="content-wrapper">
     <section class="content-header">
