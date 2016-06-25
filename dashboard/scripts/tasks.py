@@ -15,9 +15,10 @@ logger = get_task_logger(__name__)
 @periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
 def taskPeriodicTasks():
     haveLock = False
-    Lock = redis.Redis().lock("projects")
+    Lock = redis.Redis().lock("project")
     try:
         haveLock = Lock.acquire(blocking=False)
+        logger.info(haveLock)
         if haveLock:
             logger.info("Locked")
             chain(
@@ -41,13 +42,14 @@ def taskPeriodicTasks():
 @periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
 def taskGetPerformanceGraphs():
     haveLock = False
-    Lock = redis.Redis().lock("graphs")
+    Lock = redis.Redis().lock("graph")
     try:
         haveLock = Lock.acquire(blocking=False)
         if haveLock:
             logger.info("Locked")
             chain(
-                webScraper.getPerformanceGraphs()
+                webScraper.getPerformanceGraphsBeryllium(),
+                webScraper.getPerformanceGraphsBoron()
             )
     finally:
         if haveLock:

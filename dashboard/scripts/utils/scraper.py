@@ -201,3 +201,26 @@ def getContributorsCount():
 					break
 			else:
 				break
+
+# List of collaborators
+def getContributorsCount():
+	projects = Projects.objects.all()
+	for project in projects:
+		page = 1
+		while 1:
+			url = "https://api.github.com/repos/opendaylight/"+project.name+"/contributors?page="+str(page)+"&per_page=100"
+			r = requests.get(url, auth=('rohitsakala', 'Radha.sakala8'))
+			if r.status_code == 200:
+				for i in range(len(r.json())):
+					name = r.json()[i]["login"]
+					count = r.json()[i]["contributions"]
+					Contributors.objects.update_or_create(projectName=project,contributorName=name,defaults={'contributionCount':count})
+				if r.links:
+					try:
+						page = r.links['next']['url'].split("=")[1].split("&")[0]
+					except:
+						break
+				else:
+					break
+			else:
+				break

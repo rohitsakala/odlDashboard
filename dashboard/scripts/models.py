@@ -39,14 +39,14 @@ class Commit(models.Model):
 
 class Contributors(models.Model):
 	projectName =  models.ForeignKey('Projects',on_delete=models.CASCADE)
-	contributorName = models.CharField(max_length=255)
+	contributorName = models.CharField(max_length=1000)
 	contributionCount = models.IntegerField(default=0)
 
 	class Meta:
 		unique_together = ('projectName','contributorName')
 
 class Urls(models.Model):
-	url = models.CharField(unique=True,max_length=100023)
+	url = models.CharField(unique=True,max_length=1000)
 
 class PerformanceGraphs(models.Model):
 	mainUrl = models.ForeignKey('Urls',blank=True)
@@ -55,6 +55,7 @@ class PerformanceGraphs(models.Model):
 	componentName = models.CharField(max_length=1000)
 	jenkinsUrl = models.CharField(max_length=1000)
 	plotId = models.IntegerField()
+	plugin = models.CharField(max_length=1000)
 
 	class Meta:
-		unique_together = ('jobName','plotId')
+		unique_together = ('jobName','plotId','plugin')

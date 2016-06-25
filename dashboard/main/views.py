@@ -30,10 +30,13 @@ def project(request, project_id):
     data = {'project' : project,'bugs' : bugs,'test' : test,'commit' : commit,'contributors' : contributors,'components':components}
     return render(request, 'main/project.html', data)
 
-def performance(request,name):
-    performanceGraphs = PerformanceGraphs.objects.filter(componentName=name)
-    components = PerformanceGraphs.objects.order_by().values('componentName').distinct()
-    data = {'performance' : performanceGraphs,'name':name,'components':components}
+def performance(request,name,plugin):
+    performanceGraphs = PerformanceGraphs.objects.filter(componentName=name,plugin=plugin)
+    plugins = PerformanceGraphs.objects.values('plugin').distinct()
+    pluginComponent = {}
+    for i in range(len(plugins)):
+        pluginComponent[plugins[i]['plugin']] = PerformanceGraphs.objects.filter(plugin=plugins[i]['plugin']).order_by().values('componentName').distinct()
+    data = {'performance' : performanceGraphs,'name':name,'pluginComponent':pluginComponent}
     return render(request, 'main/performance.html', data)
 
 def comparison(request):
