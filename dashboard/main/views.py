@@ -39,6 +39,8 @@ def project(request, project_id):
 def performance(request,name,plugin):
     performanceGraphs = PerformanceGraphs.objects.filter(componentName=name,plugin=plugin)
     plugins = PerformanceGraphs.objects.values('plugin').distinct()
+    for performance in performanceGraphs:
+        print performance.jobName
     pluginComponent = {}
     for i in range(len(plugins)):
         pluginComponent[plugins[i]['plugin']] = PerformanceGraphs.objects.filter(plugin=plugins[i]['plugin']).order_by().values('componentName').distinct()
