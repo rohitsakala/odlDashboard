@@ -12,7 +12,7 @@ from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
 # A periodic task that will run every day to fetch list of OpenDayLight projects 
-@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
+#@periodic_task(run_every=(crontab(hour="*", minute="*", day_of_week="*")))
 def taskPeriodicTasks():
     haveLock = False
     Lock = redis.Redis().lock("project")
@@ -48,8 +48,7 @@ def taskGetPerformanceGraphs():
         if haveLock:
             logger.info("Locked")
             chain(
-                webScraper.getPerformanceGraphsBeryllium(),
-                webScraper.getPerformanceGraphsBoron()
+                webScraper.getPerformanceGraphs()   
             )
     finally:
         if haveLock:
