@@ -4,19 +4,13 @@ import json
 
 def index(request):
     projectList = Projects.objects.all()
-    plugins = PerformanceGraphs.objects.values('plugin').distinct()
-    pluginComponent = {}
-    for i in range(len(plugins)):
-        pluginComponent[plugins[i]['plugin']] = PerformanceGraphs.objects.filter(plugin=plugins[i]['plugin']).order_by().values('componentName').distinct()
-    data = {'projectList' : projectList,'pluginComponent':pluginComponent}
+    components = PerformanceGraphs.objects.values('componentName').distinct()
+    data = {'projectList' : projectList,'components':components}
     return render(request, 'main/list.html', data)
 
 def project(request, project_id):
     project = get_object_or_404(Projects, pk=project_id)
-    plugins = PerformanceGraphs.objects.values('plugin').distinct()
-    pluginComponent = {}
-    for i in range(len(plugins)):
-        pluginComponent[plugins[i]['plugin']] = PerformanceGraphs.objects.filter(plugin=plugins[i]['plugin']).order_by().values('componentName').distinct()
+    components = PerformanceGraphs.objects.values('componentName').distinct()
     try:
         bugs = Bugs.objects.get(projectName=project)
     except:
@@ -33,18 +27,16 @@ def project(request, project_id):
         contributors = Contributors.objects.filter(projectName=project)
     except:
         contributors = None
-    data = {'project' : project,'bugs' : bugs,'test' : test,'commit' : commit,'contributors' : contributors,'pluginComponent':pluginComponent}
+    data = {'project' : project,'bugs' : bugs,'test' : test,'commit' : commit,'contributors' : contributors,'components':components}
     return render(request, 'main/project.html', data)
 
-def performance(request,name,plugin):
-    performanceGraphs = PerformanceGraphs.objects.filter(componentName=name,plugin=plugin)
+def performance(request,component):
     plugins = PerformanceGraphs.objects.values('plugin').distinct()
-    for performance in performanceGraphs:
-        print performance.jobName
-    pluginComponent = {}
-    for i in range(len(plugins)):
-        pluginComponent[plugins[i]['plugin']] = PerformanceGraphs.objects.filter(plugin=plugins[i]['plugin']).order_by().values('componentName').distinct()
-    data = {'performance' : performanceGraphs,'name':name,'pluginComponent':pluginComponent}
+    graphs = {}
+    for plugin in plugins:
+        graphs[plugin['plugin']] = PerformanceGraphs.objects.filter(componentName=component,plugin=plugin['plugin']).order_by('jobName')
+    components = PerformanceGraphs.objects.values('componentName').distinct()
+    data = {'performance' : graphs,'components':components}
     return render(request, 'main/performance.html', data)
 
 def comparison(request):

@@ -46,15 +46,10 @@
             <i class="fa fa-share"></i> <span>Performance Tests</span>
             <i class="fa fa-angle-left pull-right"></i>
           </a>
-          {% for key,value in pluginComponent.items %}
+          {% for component in components %}
           <ul class="treeview-menu">
             <li>
-              <a href="#"><i class="fa fa-circle-o"></i>{{ key }}<i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-              {% for component in value %}
-              <li><a href="/main/performance/{{key}}/{{component.componentName}}/"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a></li>
-              {% endfor %}
-              </ul>
+              <a href="/main/performance/{{component.componentName}}"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a>
             </li>
           </ul>
           {% endfor %}
