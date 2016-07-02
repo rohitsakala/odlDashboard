@@ -43,5 +43,7 @@ def getPerformanceGraphs():
 						if length != 0:
 							for x in range(length):
 								newUrl = jenkinsUrl + "getPlot?index="+str(x)+"&width=750&height=450"
+								m=re.search(".*/job/(.*)/plot.*",newUrl)
+								jenkinsJobName = m.group(1)
 								plotId = x
-								PerformanceGraphs.objects.update_or_create(plugin=plugin,plotId=plotId,jobName=jobName,defaults={'mainUrl':url,'toolUsed':toolUsed,'componentName':componentName,'jenkinsUrl':newUrl})
+								PerformanceGraphs.objects.update_or_create(plugin=plugin,plotId=plotId,jobName=jobName,defaults={'jenkinsJobName':jenkinsJobName,'mainUrl':url,'toolUsed':toolUsed,'componentName':componentName,'jenkinsUrl':newUrl})

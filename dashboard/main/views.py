@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404,HttpResponse,render
 from scripts.models import Projects,Bugs,Test,Commit,Contributors,PerformanceGraphs
 import json
+import collections
 
 def index(request):
     projectList = Projects.objects.all()
@@ -36,7 +37,8 @@ def performance(request,component):
     for plugin in plugins:
         graphs[plugin['plugin']] = PerformanceGraphs.objects.filter(componentName=component,plugin=plugin['plugin']).order_by('jobName')
     components = PerformanceGraphs.objects.values('componentName').distinct()
-    data = {'performance' : graphs,'components':components}
+    print graphs
+    data = {'performance' : collections.OrderedDict(sorted(graphs.items(),reverse=True)),'components':components}
     return render(request, 'main/performance.html', data)
 
 def comparison(request):

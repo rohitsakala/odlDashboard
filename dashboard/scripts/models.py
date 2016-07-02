@@ -56,6 +56,7 @@ class PerformanceGraphs(models.Model):
 	jenkinsUrl = models.CharField(max_length=1000)
 	plotId = models.IntegerField()
 	plugin = models.CharField(max_length=1000)
+	jenkinsJobName = models.CharField(max_length=1000)
 
 	class Meta:
 		unique_together = ('jobName','plotId','plugin')
