@@ -22,7 +22,9 @@ def getPerformanceGraphs():
 			s = i.find_next(class_="mw-headline").string
 			plugin = s[s.find("(")+1:s.find(")")]
 			seen = set()
+			setNo = 0
 			for y in i.find_next_siblings('h3'):
+				setNo = 0
 				componentName = y.string
 				if componentName in seen:
 					pass
@@ -31,8 +33,15 @@ def getPerformanceGraphs():
 					toolUsed = y.find_next('h4').string
 					ul = y.find_next('ul')
 					for li in ul.find_all('li'):
+						setNo = setNo + 1
 						jenkinsUrl = li.find_next('a').get('href')
 						jobName = li.find_next('a').string
+						if plugin == "Boron":
+							if "Beryllium" in jobName:
+								setNo = setNo - 1
+						elif plugin == "Beryllium":
+							if "Boron" in jobName:
+								setNo = setNo - 1
 						r2 = requests.get(jenkinsUrl)
 						soup2 = BeautifulSoup(r2.text,'html.parser')
 						length = 0
@@ -46,4 +55,4 @@ def getPerformanceGraphs():
 								m=re.search(".*/job/(.*)/plot.*",newUrl)
 								jenkinsJobName = m.group(1)
 								plotId = x
-								PerformanceGraphs.objects.update_or_create(plugin=plugin,plotId=plotId,jobName=jobName,defaults={'jenkinsJobName':jenkinsJobName,'mainUrl':url,'toolUsed':toolUsed,'componentName':componentName,'jenkinsUrl':newUrl})
+								PerformanceGraphs.objects.update_or_create(plugin=plugin,plotId=plotId,jobName=jobName,defaults={'jenkinsJobName':jenkinsJobName,'mainUrl':url,'toolUsed':toolUsed,'componentName':componentName,'jenkinsUrl':newUrl,'setNo':setNo})

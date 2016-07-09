@@ -70,12 +70,10 @@
         </ol>
       </section>
       <section class="content">
+        <h2>  Boron Release </h2>  
         <div class="row">
-          {% for key,values in performance.items %}
-          <div class="col-md-6">
-            <h2> {{key}} Plugin </h2>
-            {% for graph in values %}  
-            <div>
+            {% for graph in performance %}
+            <div class="col-md-6">
               <div class="box box-success">
                 <div class="box-header">
                   <h3 class="box-title">{{ graph.jobName }}</h3>
@@ -87,9 +85,8 @@
               </div>
             </div>
             {% endfor %}
-          </div>
-          {% endfor %}
-        </section>  
+        </div>
+      </section>  
     </div>
     <footer class="main-footer">
       <div class="pull-right hidden-xs">

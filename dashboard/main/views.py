@@ -31,14 +31,14 @@ def project(request, project_id):
     data = {'project' : project,'bugs' : bugs,'test' : test,'commit' : commit,'contributors' : contributors,'components':components}
     return render(request, 'main/project.html', data)
 
-def performance(request,component):
-    plugins = PerformanceGraphs.objects.values('plugin').distinct()
-    graphs = {}
-    for plugin in plugins:
-        graphs[plugin['plugin']] = PerformanceGraphs.objects.filter(componentName=component,plugin=plugin['plugin']).order_by('jobName')
+def performance(request,component,plugin):
+    graphs = PerformanceGraphs.objects.filter(componentName=component,plugin=plugin).extra(select={'length':'Length("jobName")'}).order_by('setNo','plotId','-length')
+    for graph in graphs:
+        print graph.jobName
+        print graph.plotId
+        print graph.setNo
     components = PerformanceGraphs.objects.values('componentName').distinct()
-    print graphs
-    data = {'performance' : collections.OrderedDict(sorted(graphs.items(),reverse=True)),'components':components}
+    data = {'performance' : graphs,'components':components}
     return render(request, 'main/performance.html', data)
 
 def comparison(request):
