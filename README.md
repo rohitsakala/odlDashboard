@@ -29,6 +29,11 @@ Under Development
 - sudo apt-get install screen
 - screen
 - cd ..
+- python manage.py createsuperuser
+- rohitsakala
+- password
+- go to domain/admin and insert https://wiki.opendaylight.org/view/CrossProject:Integration_Group:Performance_Test:Results into urls
 - python manage.py runserver 0.0.0.0:8000
 - screen
+- 
 - python manage.py celeryd --beat ---autoreload --verbosity=2 --loglevel=DEBUG
