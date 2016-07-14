@@ -12,6 +12,10 @@ Under Development
 - mkvirtualenv odl
 - workon odl
 - sudo apt-get install libpq-dev python-dev
+- sudo apt-get install rabbitmq-server
+- sudo add-apt-repository ppa:chris-lea/redis-server
+- sudo apt-get update
+- sudo apt-get install redis-server
 - sudo apt-get install postgresql postgresql-contrib
 - cd odlDashboard
 - pip install -r requirements.txt
@@ -26,4 +30,5 @@ Under Development
 - screen
 - cd ..
 - python manage.py runserver 0.0.0.0:8000
-- 
+- screen
+- python manage.py celeryd --beat ---autoreload --verbosity=2 --loglevel=DEBUG
