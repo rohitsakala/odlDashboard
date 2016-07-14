@@ -5,13 +5,19 @@ import collections
 
 def index(request):
     projectList = Projects.objects.all()
-    components = PerformanceGraphs.objects.values('componentName').distinct()
-    data = {'projectList' : projectList,'components':components}
+    plugins = PerformanceGraphs.objects.values('plugin').distinct()
+    components = {}
+    for plugin in plugins:
+        components[plugin['plugin']] = PerformanceGraphs.objects.filter(plugin=plugin['plugin']).values('componentName').distinct()
+    data = {'projectList' : projectList,'components': collections.OrderedDict(components)}
     return render(request, 'main/list.html', data)
 
 def project(request, project_id):
     project = get_object_or_404(Projects, pk=project_id)
-    components = PerformanceGraphs.objects.values('componentName').distinct()
+    plugins = PerformanceGraphs.objects.values('plugin').distinct()
+    components = {}
+    for plugin in plugins:
+        components[plugin['plugin']] = PerformanceGraphs.objects.filter(plugin=plugin['plugin']).values('componentName').distinct()
     try:
         bugs = Bugs.objects.get(projectName=project)
     except:
@@ -32,13 +38,17 @@ def project(request, project_id):
     return render(request, 'main/project.html', data)
 
 def performance(request,component,plugin):
+    pluginName = plugin
     graphs = PerformanceGraphs.objects.filter(componentName=component,plugin=plugin).extra(select={'length':'Length("jobName")'}).order_by('setNo','plotId','-length')
     for graph in graphs:
-        print graph.jobName
-        print graph.plotId
         print graph.setNo
-    components = PerformanceGraphs.objects.values('componentName').distinct()
-    data = {'performance' : graphs,'components':components}
+        print graph.plotId
+        print graph.jobName
+    plugins = PerformanceGraphs.objects.values('plugin').distinct()
+    components = {}
+    for plugin in plugins:
+        components[plugin['plugin']] = PerformanceGraphs.objects.filter(plugin=plugin['plugin']).values('componentName').distinct()
+    data = {'performance' : graphs,'components':components,'plugin':pluginName}
     return render(request, 'main/performance.html', data)
 
 def comparison(request):
@@ -49,4 +59,4 @@ def comparison(request):
         projects.append(str(bug.projectName.name))
         values.append(bug.major + bug.minor + bug.normal + bug.highest + bug.high + bug.critical + bug.blocker)
     data = {'projects' : projects,'values' : values}
-    return render(request, 'main/comparison.html', data) 
+    return render(request, 'main/comparison.html', data)

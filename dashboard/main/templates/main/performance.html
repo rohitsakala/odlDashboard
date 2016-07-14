@@ -32,26 +32,27 @@
           <li class="header">MAIN NAVIGATION</li>
           <li class="treeview">
             <a href="#">
-              <i class="fa fa-dashboard"></i> <span>Project</span> <i class="fa fa-angle-left pull-right"></i>
+              <i class="fa fa-dashboard"></i> <span>Project</span><i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
               <li ><a href="/main/"><i class="fa fa-circle-o"></i> List</a></li>
             </ul>
           </li>
+          {% for key,value in components.items %}
           <li class="treeview active">
-          <a href="#">
-            <i class="fa fa-share"></i> <span>Boron Release</span>
-            <i class="fa fa-angle-left pull-right"></i>
-          </a>
-          {% for component in components %}
-          <ul class="treeview-menu">
-            <li>
-              <a href="/main/performance/{{component.componentName}}"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a>
-            </li>
-          </ul>
-          {% endfor %}
+            <a href="#">
+              <i class="fa fa-share"></i> <span>{{key}} Release</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            {% for component in value %}
+            <ul class="treeview-menu">
+              <li>
+                <a href="/main/performance/{{key}}/{{component.componentName}}"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a>
+              </li>
+            </ul>
+            {% endfor %}
           </li>
-        <li>
+          {% endfor %}
           <li>
             <a href="/main/comparison"><span>Comparison</span></a>
           </li>
@@ -61,7 +62,7 @@
     <div class="content-wrapper">
       <section class="content-header">
         <h1>
-          {{ name }} Performance Results
+          {{ plugin }} Performance Results
           <small>Release</small>
         </h1>
         <ol class="breadcrumb">
@@ -70,7 +71,7 @@
         </ol>
       </section>
       <section class="content">
-        <h2>  Boron Release </h2>  
+        <h2>  {{plugin}} Release </h2>  
         <div class="row">
             {% for graph in performance %}
             <div class="col-md-6">
