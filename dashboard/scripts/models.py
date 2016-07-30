@@ -71,4 +71,4 @@ class RobotResults(models.Model):
 	testName = models.CharField(max_length=1000)
 
 	class Meta:
-		unique_together = ('jobName','testName')
+		unique_together = ('jobName','testName','startTime')
