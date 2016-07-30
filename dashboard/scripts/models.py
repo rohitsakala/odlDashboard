@@ -61,3 +61,14 @@ class PerformanceGraphs(models.Model):
 
 	class Meta:
 		unique_together = ('jobName','plotId','plugin')
+
+class RobotResults(models.Model):
+	jobName = models.CharField(max_length=1000)
+	status = models.CharField(max_length=1000)
+	elapsedTime = models.CharField(max_length=1000)
+	critical = models.CharField(max_length=1000)
+	startTime = models.CharField(max_length=1000)
+	testName = models.CharField(max_length=1000)
+
+	class Meta:
+		unique_together = ('jobName','testName')
