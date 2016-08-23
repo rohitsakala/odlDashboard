@@ -72,3 +72,12 @@ class RobotResults(models.Model):
 
 	class Meta:
 		unique_together = ('jobName','testName','startTime')
+
+class PerfResults(models.Model):
+	jobName = models.CharField(max_length=1000)
+	title = models.CharField(max_length=1000)
+	yaxis = models.CharField(max_length=1000)
+	plotGroup = models.CharField(max_length=1000)
+
+	class Meta:
+		unique_together = ('jobName','title')
