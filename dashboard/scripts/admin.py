@@ -6,3 +6,4 @@ admin.site.register(Bugs)
 admin.site.register(Urls)
 admin.site.register(PerformanceGraphs)
 admin.site.register(robot_results)
+
