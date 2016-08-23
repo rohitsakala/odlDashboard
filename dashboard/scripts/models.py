@@ -62,16 +62,17 @@ class PerformanceGraphs(models.Model):
 	class Meta:
 		unique_together = ('jobName','plotId','plugin')
 
-class RobotResults(models.Model):
-	jobName = models.CharField(max_length=1000)
+class robot_results(models.Model):
+	job_name = models.CharField(max_length=1000)
 	status = models.CharField(max_length=1000)
-	elapsedTime = models.CharField(max_length=1000)
+	elapsed_time = models.CharField(max_length=1000)
 	critical = models.CharField(max_length=1000)
-	startTime = models.CharField(max_length=1000)
-	testName = models.CharField(max_length=1000)
+	start_time = models.CharField(max_length=1000)
+	test_name = models.CharField(max_length=1000)
+        build_number = models.CharField(max_length=1000)
 
 	class Meta:
-		unique_together = ('jobName','testName','startTime')
+		unique_together = ('job_name','test_name','start_time')
 
 class PerfResults(models.Model):
 	jobName = models.CharField(max_length=1000)
@@ -81,3 +82,4 @@ class PerfResults(models.Model):
 
 	class Meta:
 		unique_together = ('jobName','title')
+
