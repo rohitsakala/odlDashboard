@@ -79,7 +79,9 @@ class perf_results(models.Model):
 	title = models.CharField(max_length=1000)
 	yaxis = models.CharField(max_length=1000)
 	plot_group = models.CharField(max_length=1000)
-	value = models.CharField(max_length=1000)
+	min_value = models.CharField(max_length=1000)
+        max_value = models.CharField(max_length=1000)
+        avg_value = models.CharField(max_length=1000)
 
 	class Meta:
 		unique_together = ('job_name','title')
