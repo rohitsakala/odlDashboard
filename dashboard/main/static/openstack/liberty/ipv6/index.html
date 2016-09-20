@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link href="http://github.com/ankur-odl/ankur-odl.github.io/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<table>
+<hr>
+<tr><td valign="top"></td><td><a href="http://ankur-odl.github.io" role="button" class="btn">Parent Directory</a></td></tr>
+<tr><td valign="top"></td><td><a href="ipv6/ipv6results.html" role="button" class="btn">Tempest IPv6 Results</a></td></tr>
+<tr><td valign="top"></td><td><a href="ipv6/ipv6-logs.zip" role="button" class="btn">Download Logs</a></td></tr>
+</table>
+<hr>
+<h2>Guide to Tempest Results Runs</h2>
+<br>
+You are looking at the full test results of a devstack setup and tempest run for Openstack and Opendaylight, as well as all the logs of all the relevant services that were running during that tempest test run. From them you should have enough information to debug.
+<br><br>
+<h3>How To Debug - Quickstart</h3>
+<br>
+&nbsp;    results page will show all passing and failing tests<br>
+&nbsp;    copy the timestamp of that failing test<br>
+&nbsp;    go into logs directory and look at that time stamp in related service logs for traces, failures, or other oddities <br>
+<br><br>
+<h3>File Overview</h3>
+/logs/stack.sh.log
+This file contains the stdout/stderr console of the Tempest job. The basic flow of the file goes as follows:
+<br>
+&nbsp;    Boot guest from base Linux image<br>
+&nbsp;    Use devstack to install all required packages (debs and pips)<br>
+&nbsp;    Run devstack exercises (very basic sanity checking)<br>
+&nbsp;    Run tempest tests <br>
+<br>
+All the devstack setup is done under bash tracing, so is extremely verbose. This is to ensure enough data is captured so that you can debug failures in the gate with the information provided.
+<br><br>
+The Tempest Test results are in the associated Results file. 
+<br><br>
+<h3>Logs</h3>
+<br>
+The logs directory contains all the screen logs from all the services during the Tempest run. 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://github.com/ankur-odl/ankur-odl.github.io/js/bootstrap.min.js"></script>
+</html>
+i

@@ -1,0 +1,815 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>OpenDayLight Release Dashboard</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="{% static 'main/bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'main/dist/css/AdminLTE.min.css' %}">
+  <link rel="stylesheet" href="{% static 'main/dist/css/skins/skin-blue.min.css' %}">
+  <link rel="stylesheet" href="{% static 'main/bootstrap/css/ionicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'main/plugins/iCheck/flat/blue.css' %}">
+  <link rel="stylesheet" href="{% static 'main/plugins/morris/morris.css' %}">
+  <link rel="stylesheet" href="{% static 'main/plugins/jvectormap/jquery-jvectormap-1.2.2.css' %}">
+  <link rel="stylesheet" href="{% static 'main/bootstrap/css/font-awesome.min.css' %}">   
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+  <header class="main-header">
+    <a href="https://www.opendaylight.org" class="logo">
+      <span class="logo-mini"><b>ODL</b></span>
+      <span class="logo-lg"><b>OpenDayLight</b></span>
+    </a>
+    <nav class="navbar navbar-static-top">
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+    </nav>
+  </header>
+  <aside class="main-sidebar">
+      <section class="sidebar">
+        <ul class="sidebar-menu">
+          <li class="header">MAIN NAVIGATION</li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-dashboard"></i> <span>Project</span><i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li ><a href="/main/"><i class="fa fa-circle-o"></i> List</a></li>
+            </ul>
+          </li>
+          {% for key,value in components.items %}
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-share"></i> <span>{{key}} Release</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            {% for component in value %}
+            <ul class="treeview-menu">
+              <li>
+                <a href="/main/performance/{{key}}/{{component.componentName}}"><i class="fa fa-circle-o"></i>{{ component.componentName }}</a>
+              </li>
+            </ul>
+            {% endfor %}
+          </li>
+          {% endfor %}
+          <li class="treeview active">
+            <a href="#">
+              <i class="fa fa-table"></i> <span>OpenStack + ODL</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/main/openstack"><i class="fa fa-circle-o"></i> Overview</a></li>
+              <li><a href="https://github.com/01org/opendaylight"><i class="fa fa-circle-o"></i> Configuration Files</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="/main/comparison"><span>Comparison</span></a>
+          </li>
+        </ul>
+      </section>
+    </aside>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Release</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/main/"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">OpenStack + ODL</li>
+      </ol>
+    </section>
+    <section class="content">
+      <div class="box box-danger">
+        <div class="box-header with-border">
+          <h3 class="box-title">OpenStack + OpenDayLight Tempest Results</h3>
+          <div class="box-body">
+            <div class="row placeholders">
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder19">
+                  <canvas id="chart9" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>L3: Master v. Master</h4>
+                <span class="text-muted">Api</span>
+              </div>
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder10">
+                  <canvas id="chart10" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>L3: Master v. Master</h4>
+                <span class="text-muted">Basic Ops</span>
+              </div>
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder11">
+                  <canvas id="chart11" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>L3: Master v. Master</h4>
+                <span class="text-muted">IPv6</span>
+              </div>
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder12">
+                  <canvas id="chart12" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>L3: Master v. Master</h4>
+                <span class="text-muted">Advanced Ops</span>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer">
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Openstack Version</th>
+                    <th>OpenDaylight Version</th>
+                    <th>OpenDaylight Provider</th>
+                    <th>Tempest Test</th>
+                    <th>Last Run</th>
+                    <th>Results</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Master</td>
+                    <td>Master</td>
+                    <td>L3</td>
+                    <td>Api</td>
+                    <td id='time9'></td>
+                    <td><a class="btn btn-default" href="{% static 'openstack/l3/api/index.html' %}">Api Results</a></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Master</td>
+                    <td>Master</td>
+                    <td>L3</td>
+                    <td>Basic Ops</td>
+                    <td id='time10'></td>
+                    <td><a class="btn btn-default" href="{% static 'openstack/l3/basicops/index.html' %}">Basic Ops Results</a></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Master</td>
+                    <td>Master</td>
+                    <td>L3</td>
+                    <td>IPv6</td>
+                    <td id='time11'></td>
+                    <td><a class="btn btn-default" href="{% static 'openstack/l3/ipv6/index.html' %}">IPv6 Results</a></td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Master</td>
+                    <td>Master</td>
+                    <td>L3</td>
+                    <td>Advanced Ops</td>
+                    <td id='time12'></td>
+                    <td><a class="btn btn-default" href="{% static 'openstack/l3/advops/index.html' %}">Adv Ops Results</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box box-danger">
+        <div class="box-header with-border">
+          <h3 class="box-title">OpenStack + OpenDayLight Tempest Results</h3>
+          <div class="box-body">
+            <div class="row placeholders">
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder1">
+                  <canvas id="chart1" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>Master v. Master</h4>
+                <span class="text-muted">Api</span>
+              </div>
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder2">
+                  <canvas id="chart2" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>Master v. Master</h4>
+                <span class="text-muted">Basic Ops</span>
+              </div>
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder3">
+                  <canvas id="chart3" width="200" height="200">Blank</canvas>
+                </div>  
+                <h4>Master v. Master</h4>
+                <span class="text-muted">IPv6</span>
+              </div>
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder4">
+                  <canvas id="chart4" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>Master v. Master</h4>
+                <span class="text-muted">Advanced Ops</span>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer">
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Openstack Version</th>
+                    <th>OpenDaylight Version</th>
+                    <th>OpenDaylight Provider</th>
+                    <th>Tempest Test</th>
+                    <th>Last Run</th>
+                    <th>Results</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Master</td>
+                    <td>Master</td>
+                    <td>L2</td>
+                    <td>Api</td>
+                    <td id='time1'></td>
+                    <td><a class="btn btn-default" href="{% static 'openstack/master/api/index.html' %}">Api Results</a></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Master</td>
+                    <td>Master</td>
+                    <td>L2</td>
+                    <td>Basic Ops</td>
+                    <td id='time2'></td>
+                    <td><a class="btn btn-default" href="{% static 'openstack/master/basicops/index.html' %}">Basic Ops Results</a></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Master</td>
+                    <td>Master</td>
+                    <td>L2</td>
+                    <td>IPv6</td>
+                    <td id='time3'></td>
+                    <td><a class="btn btn-default" href="{% static 'openstack/master/ipv6/index.html' %}">IPv6 Results</a></td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Master</td>
+                    <td>Master</td>
+                    <td>L2</td>
+                    <td>Advanced Ops</td>
+                    <td id='time4'></td>
+                    <td><a class="btn btn-default" href="{% static 'openstack/master/advops/index.html' %}">Adv Ops Results</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box box-danger">
+        <div class="box-header with-border">
+          <h3 class="box-title">OpenStack + OpenDayLight Tempest Results</h3>
+          <div class="box-body">
+            <div class="row placeholders">
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder5">
+                  <canvas id="chart5" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>Liberty v. Master</h4>
+                <span class="text-muted">Api</span>
+              </div>
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder6">
+                  <canvas id="chart6" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>Liberty v. Master</h4>
+                <span class="text-muted">Basic Ops</span>
+              </div>
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder7">
+                  <canvas id="chart7" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>Liberty v. Master</h4>
+                <span class="text-muted">IPv6</span>
+              </div>
+              <div class="col-xs-6 col-sm-3 placeholder">
+                <div id="canvas-holder8">
+                  <canvas id="chart8" width="200" height="200">Blank</canvas>
+                </div>
+                <h4>Liberty v. Master</h4>
+                <span class="text-muted">Advanced Ops</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="box-footer">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Openstack Version</th>
+                  <th>OpenDaylight Version</th>
+                  <th>OpenDaylight Provider</th>
+                  <th>Tempest Test</th>
+                  <th>Last Run</th>
+                  <th>Results</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>5</td>
+                  <td>Liberty</td>
+                  <td>Master</td>
+                  <td>L2</td>
+                  <td>Api</td>
+                  <td id='time5'></td>
+                  <td><a class="btn btn-default" href="{% static 'openstack/liberty/api/index.html' %}">Api Results</a></td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Liberty</td>
+                  <td>Master</td>
+                  <td>L2</td>
+                  <td>Basic Ops</td>
+                  <td id='time6'></td>
+                  <td><a class="btn btn-default" href="{% static 'openstack/liberty/basicops/index.html' %}">Basic Ops Results</a></td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>Liberty</td>
+                  <td>Master</td>
+                  <td>L2</td>
+                  <td>IPv6</td>
+                  <td id='time7'></td>
+                  <td><a class="btn btn-default" href="{% static 'openstack/liberty/ipv6/index.html' %}">IPv6 Results</a></td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Liberty</td>
+                  <td>Master</td>
+                  <td>L2</td>
+                  <td>Advanced Ops</td>
+                  <td id='time8'></td>
+                  <td><a class="btn btn-default" href="{% static 'openstack/liberty/advops/index.html' %}">Adv Ops Results</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div >
+      </section>
+    </div>
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 0.0.1
+    </div>
+    <strong>Copyright &copy; 2016 <a href="http://www.opendaylight.org">OpenDayLight</a>.</strong> All rights
+    reserved.
+  </footer>
+</div>
+<script type="text/javascript">
+
+window.onload = function () { 
+  var masterbasicopsFailed = 0;
+  var masterbasicopsPass = 0;
+  var masterapiFailed = 0;
+  var masterapiPass = 0;
+  var masteripv6Failed = 0;
+  var masteripv6Pass = 0;
+  var masteradvopsFailed = 0;
+  var masteradvopsPass = 0;        
+  
+  var libertybasicopsFailed = 0;
+  var libertybasicopsPass = 0;
+  var libertyapiFailed = 0;
+  var libertyapiPass = 0;
+  var libertyipv6Failed = 0;
+  var libertyipv6Pass = 0;
+  var libertyadvopsFailed = 0;
+  var libertyadvopsPass = 0;        
+
+  var l3basicopsFailed = 0;
+  var l3basicopsPass = 0;
+  var l3apiFailed = 0;
+  var l3apiPass = 0;
+  var l3ipv6Failed = 0;
+  var l3ipv6Pass = 0;
+  var l3advopsFailed = 0;
+  var l3advopsPass = 0;
+
+$.get("{% static 'openstack/master/api/test.txt' %}", function ( data ) 
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      masterapiFailed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      masterapiPass += parseInt(temp[i+1]);   
+    }
+    if(temp[i] == 'Skip')
+    {
+      masterapiPass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData1 = [
+                    { 
+                      value: masterapiFailed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: masterapiPass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart1').getContext('2d');
+  var apiChart1= new Chart(ctx).Pie(pieData1);
+});
+
+$.get("{% static 'openstack/master/basicops/test.txt' %}", function ( data ) 
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      masterbasicopsFailed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      masterbasicopsPass += parseInt(temp[i+1]);              
+    }
+    if(temp[i] == 'Skip')
+    {
+      masterbasicopsPass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData2 = [
+                    { 
+                      value: masterbasicopsFailed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: masterbasicopsPass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart2').getContext('2d');
+  var apiChart2= new Chart(ctx).Pie(pieData2);
+});
+
+$.get("{% static 'openstack/master/ipv6/test.txt' %}", function ( data ) 
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      masteripv6Failed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      masteripv6Pass += parseInt(temp[i+1]);              
+    }
+    if(temp[i] == 'Skip')
+    {
+      masteripv6Pass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData3 = [
+                    { 
+                      value: masteripv6Failed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: masteripv6Pass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart3').getContext('2d');
+  var apiChart3= new Chart(ctx).Pie(pieData3);
+});
+
+$.get("{% static 'openstack/master/advops/test.txt' %}", function ( data ) 
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      masteradvopsFailed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      masteradvopsPass += parseInt(temp[i+1]);              
+    }
+    if(temp[i] == 'Skip')
+    {
+      masteradvopsPass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData4 = [
+                    { 
+                      value: masteradvopsFailed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: masteradvopsPass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart4').getContext('2d');
+  var apiChart4= new Chart(ctx).Pie(pieData4);
+});
+
+$.get("{% static 'openstack/liberty/api/test.txt' %}", function ( data )
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      libertyapiFailed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      libertyapiPass += parseInt(temp[i+1]);           
+    }
+    if(temp[i] == 'Skip')
+    {
+      libertyapiPass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData5 = [
+                    { 
+                      value: libertyapiFailed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: libertyapiPass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart5').getContext('2d');
+  var apiChart5= new Chart(ctx).Pie(pieData5);
+});
+
+$.get("{% static 'openstack/liberty/basicops/test.txt' %}", function ( data )
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      libertybasicopsFailed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      libertybasicopsPass += parseInt(temp[i+1]);           
+    }
+    if(temp[i] == 'Skip')
+    {
+      libertybasicopsPass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData6 = [
+                    { 
+                      value: libertybasicopsFailed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: libertybasicopsPass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart6').getContext('2d');
+  var apiChart6= new Chart(ctx).Pie(pieData6);
+});                  
+
+$.get("{% static 'openstack/liberty/ipv6/test.txt' %}", function ( data )
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      libertyipv6Failed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      libertyipv6Pass += parseInt(temp[i+1]);           
+    }
+    if(temp[i] == 'Skip')
+    {
+      libertyipv6Pass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData7 = [
+                    { 
+                      value: libertyipv6Failed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: libertyipv6Pass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart7').getContext('2d');
+  var apiChart7= new Chart(ctx).Pie(pieData7);
+});                  
+
+$.get("{% static 'openstack/liberty/advops/test.txt' %}", function ( data ) 
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      libertyadvopsFailed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      libertyadvopsPass += parseInt(temp[i+1]);           
+    }
+    if(temp[i] == 'Skip')
+    {
+      libertyadvopsPass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData8 = [
+                    {
+                      value: libertyadvopsFailed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: libertyadvopsPass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart8').getContext('2d');
+  var apiChart8= new Chart(ctx).Pie(pieData8);
+});                  
+
+$.get("{% static 'openstack/l3/api/test.txt' %}", function ( data )
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      l3apiFailed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      l3apiPass += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Skip')
+    {
+      l3apiPass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData9 = [
+                    {
+                      value: l3apiFailed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: l3apiPass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart9').getContext('2d');
+  var apiChart9= new Chart(ctx).Pie(pieData9);
+});
+
+$.get("{% static 'openstack/l3/basicops/test.txt' %}", function ( data ) 
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      l3basicopsFailed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      l3basicopsPass += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Skip')
+    {
+      l3basicopsPass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData10 = [
+                    {
+                      value: l3basicopsFailed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: l3basicopsPass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart10').getContext('2d');
+  var apiChart10= new Chart(ctx).Pie(pieData10);
+});
+
+$.get("{% static 'openstack/l3/ipv6/test.txt' %}", function ( data )
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      l3ipv6Failed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      l3ipv6Pass += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Skip')
+    {
+      l3ipv6Pass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData11 = [
+                    {
+                      value: l3ipv6Failed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: l3ipv6Pass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart11').getContext('2d');
+  var apiChart11= new Chart(ctx).Pie(pieData11);
+});
+
+$.get("{% static 'openstack/l3/advops/test.txt' %}", function ( data )
+{
+  var temp = data.split(' ');
+  for(var i = 0; i < temp.length; i++)
+  {
+    if(temp[i] == 'Failure')
+    {
+      l3advopsFailed += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Pass' )
+    {
+      l3advopsPass += parseInt(temp[i+1]);
+    }
+    if(temp[i] == 'Skip')
+    {
+      l3advopsPass += parseInt(temp[i+1]);
+    }
+  }
+  var pieData12 = [
+                    {
+                      value: l3advopsFailed,
+                      color: '#F7464A'
+                    },
+                    {
+                      value: l3advopsPass,
+                      color: '#46BFBD'
+                    }
+                  ];
+  var ctx = document.getElementById('chart12').getContext('2d');
+  var apiChart12= new Chart(ctx).Pie(pieData12);
+});
+
+$('#time1').load("{% static 'openstack/master/api/time.txt' %}");
+$('#time2').load("{% static 'openstack/master/basicops/time.txt' %}");
+$('#time3').load("{% static 'openstack/master/ipv6/time.txt' %}");
+$('#time4').load("{% static 'openstack/master/advops/time.txt' %}");
+$('#time5').load("{% static 'openstack/liberty/api/time.txt' %}");
+$('#time6').load("{% static 'openstack/liberty/basicops/time.txt' %}");
+$('#time7').load("{% static 'openstack/liberty/ipv6/time.txt' %}");
+$('#time8').load("{% static 'openstack/liberty/advops/time.txt' %}");
+$('#time9').load("{% static 'openstack/l3/api/time.txt' %}");
+$('#time10').load("{% static 'openstack/l3/basicops/time.txt' %}");
+$('#time11').load("{% static 'openstack/l3/ipv6/time.txt' %}");
+$('#time12').load("{% static 'openstack/l3/advops/time.txt' %}");
+};
+</script> 
+<script src="{% static 'main/plugins/jQuery/jQuery-2.2.0.min.js' %}"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
+<script src="{% static 'main/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'main/plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'main/plugins/fastclick/fastclick.js' %}"></script>
+<script src="{% static 'main/dist/js/app.min.js' %}"></script>
+<script src="{% static 'main/dist/js/pages/dashboard.js' %}"></script>
+<script src="{% static 'main/dist/js/demo.js' %}"></script>
+<script src="{% static 'main/dist/js/Chart.js' %}"></script>
+<script src="{% static 'main/dist/js/Chart.min.js' %}"></script>
+</body>
+</html>
