@@ -60,3 +60,12 @@ def comparison(request):
         values.append(bug.major + bug.minor + bug.normal + bug.highest + bug.high + bug.critical + bug.blocker)
     data = {'projects' : projects,'values' : values}
     return render(request, 'main/comparison.html', data)
+
+def openstack(request):
+    plugins = PerformanceGraphs.objects.values('plugin').distinct()
+    components = {}
+    for plugin in plugins:
+        components[plugin['plugin']] = PerformanceGraphs.objects.filter(plugin=plugin['plugin']).values('componentName').distinct()
+    data = {'components': collections.OrderedDict(components)}
+    return render(request,  'main/openstack.html', data)
+

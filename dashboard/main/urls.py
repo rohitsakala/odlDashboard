@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^performance/(?P<plugin>.*)/(?P<component>.*)/$', views.performance, name='performance'),
     # /main/comparison
     url(r'^comparison/', views.comparison, name='comparison'),
+    # /main/openstack
+    url(r'^openstack/', views.openstack, name='openstack'),
 ]
